@@ -2,3 +2,5 @@ pyaudio
 pulsectl
 aubio
 numpy
+ruff
+pre-commit
