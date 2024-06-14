@@ -7,7 +7,7 @@ from audio_streaming.audio_stream import AudioStream
 
 class LinuxAudioStream(AudioStream):
     
-    def __init__(self, os: str = "linux", chunk_size: int = 1024, 
+    def __init__(self, os: str = "linux", chunk_size: int = 512, 
                  rate: int = 44100, channels: int = 2, format: np.dtype = np.int16):
         self.os = "linux"
         self.chunk_size = chunk_size
