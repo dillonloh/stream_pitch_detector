@@ -1,5 +1,6 @@
 import aubio
 import numpy as np
+from scipy.signal import resample
 
 
 class AudioProcessor:
@@ -32,6 +33,7 @@ class AudioProcessor:
 
     def get_chunk_pitch(self, chunk: np.ndarray) -> float:
         """Get the pitch of an audio chunk
+        Reference: https://github.com/aubio/aubio/blob/master/python/demos/demo_pitch.py
 
         Args:
             chunk (np.ndarray): The audio chunk
@@ -53,3 +55,23 @@ class AudioProcessor:
         pitch = self.pitch_detector(chunk)[0]
 
         return pitch
+
+    def shift_pitch(self, chunk: np.ndarray, semitones: float = 0) -> np.ndarray:
+        """
+        Shift the pitch of an audio chunk
+        Reference: https://github.com/aubio/aubio/blob/master/python/demos/demo_pitchshift.py
+
+        Args:
+            chunk (np.ndarray): The audio chunk
+            semitones (float): The number of semitones to shift the pitch by
+
+        Returns:
+            np.ndarray: The pitch shifted audio chunk
+
+        """
+
+        factor = 2 ** (semitones / 12.0)
+        new_length = int(len(chunk) / factor)
+        shifted_chunk = resample(chunk, new_length)
+
+        return shifted_chunk

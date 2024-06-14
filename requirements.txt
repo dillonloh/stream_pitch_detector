@@ -4,3 +4,4 @@ aubio
 numpy
 ruff
 pre-commit
+scipy
