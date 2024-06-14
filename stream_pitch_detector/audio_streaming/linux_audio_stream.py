@@ -3,7 +3,7 @@ import subprocess
 import aubio
 import numpy as np
 
-from stream_pitch_detector.audio_streaming.audio_stream import AudioStream
+from audio_streaming.audio_stream import AudioStream
 
 class LinuxAudioStream(AudioStream):
     
@@ -67,11 +67,8 @@ class LinuxAudioStream(AudioStream):
         
         else:    
             raise Exception("Stream is not running")
-
-        chunk = self.stream_process.stdout.read(self.chunk_size * self.channels * 2)
-
-        return np.frombuffer(chunk, dtype=self.format)
     
+
     def stream_audio_chunk(self) -> np.ndarray:
         """
         Return a chunk of audio data from the stream
@@ -83,7 +80,11 @@ class LinuxAudioStream(AudioStream):
         if not self.stream_process:
             raise Exception("Stream is not running")
 
-        chunk = self.stream_process.stdout.read(self.chunk_size * self.channels * 2)
+        chunk_bin = self.stream_process.stdout.read(self.chunk_size * self.channels * 2)
+        
+        # reshape the data to the correct shape [chunk_size, channels]
+        # works since the data from the stereo channels is interleaved
+        chunk = np.frombuffer(chunk_bin, dtype=self.format).reshape(-1, self.channels)
 
-        return np.frombuffer(chunk, dtype=self.format)
+        return chunk
     
