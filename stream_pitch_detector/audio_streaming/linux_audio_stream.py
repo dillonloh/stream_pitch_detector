@@ -7,12 +7,13 @@ from audio_streaming.audio_stream import AudioStream
 
 class LinuxAudioStream(AudioStream):
     
-    def __init__(self):
+    def __init__(self, os: str = "linux", chunk_size: int = 1024, 
+                 rate: int = 44100, channels: int = 2, format: np.dtype = np.int16):
         self.os = "linux"
-        self.chunk_size = 512
-        self.rate = 44100
-        self.channels = 2
-        self.format = np.int16
+        self.chunk_size = chunk_size
+        self.rate = rate
+        self.channels = channels
+        self.format = format
         self.device = self._get_default_sink_monitor()
 
         self.parec_command = [
