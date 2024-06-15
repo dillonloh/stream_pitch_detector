@@ -9,7 +9,7 @@ from audio_processing.audio_processor import AudioProcessor
 
 OUTPUT_FILE = "shifted_audio.wav"
 SEMITONES = -4
-DURATION = 10
+DURATION = 60
 
 
 def main():

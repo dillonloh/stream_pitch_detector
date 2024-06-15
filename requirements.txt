@@ -5,3 +5,4 @@ numpy
 ruff
 pre-commit
 scipy
+librosa

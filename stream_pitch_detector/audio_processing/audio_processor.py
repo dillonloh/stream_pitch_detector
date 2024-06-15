@@ -1,6 +1,7 @@
 import aubio
+
+from librosa.effects import pitch_shift
 import numpy as np
-from scipy.signal import resample
 
 
 class AudioProcessor:
@@ -59,7 +60,7 @@ class AudioProcessor:
     def shift_pitch(self, chunk: np.ndarray, semitones: float = 0) -> np.ndarray:
         """
         Shift the pitch of an audio chunk
-        Reference: https://github.com/aubio/aubio/blob/master/python/demos/demo_pitchshift.py
+        Reference: https://librosa.org/doc/latest/generated/librosa.effects.pitch_shift.html#librosa.effects.pitch_shift
 
         Args:
             chunk (np.ndarray): The audio chunk
@@ -70,8 +71,13 @@ class AudioProcessor:
 
         """
 
-        factor = 2 ** (semitones / 12.0)
-        new_length = int(len(chunk) / factor)
-        shifted_chunk = resample(chunk, new_length)
+        # check if stereo
+        if chunk.shape[1] == 2:
+            # convert to mono by averaging the channels for each sample
+            chunk = np.mean(chunk, axis=1)
+
+        shifted_chunk = pitch_shift(
+            chunk, sr=self.sample_rate, n_steps=semitones, n_fft=chunk.shape[0]
+        )  # avoid padding by setting n_fft to chunk size
 
         return shifted_chunk
