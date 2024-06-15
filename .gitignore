@@ -162,3 +162,4 @@ cython_debug/
 #.idea/
 
 archive/
+stream_pitch_detector/output/
