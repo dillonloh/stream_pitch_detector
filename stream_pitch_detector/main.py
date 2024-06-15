@@ -15,7 +15,7 @@ def main(
     sample_rate=44100,
     semitones=0,
     duration=-1,
-    output_file="shifted_audio.wav",
+    output_file="shifted_audio",
 ):
     # check if os is linux
     try:
@@ -56,10 +56,11 @@ def main(
 
     # Concatenate all shifted audio chunks
     shifted_audio = np.concatenate(shifted_audio, axis=0)
-
+    output_file_name = f"{OUTPUT_FOLDER}/{output_file}_{semitones}.wav"
     # Save the shifted audio to a file
+
     write(
-        f"{OUTPUT_FOLDER}/{output_file}",
+        output_file_name,
         audio_stream.rate,
         shifted_audio.astype(np.int16),
     )
@@ -69,7 +70,7 @@ if __name__ == "__main__":
     main(
         chunk_size=2048,
         sample_rate=44100,
-        semitones=-4,
+        semitones=7,
         duration=60,
-        output_file="shifted_audio.wav",
+        output_file="shifted_audio",
     )
