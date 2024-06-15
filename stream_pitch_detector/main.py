@@ -7,6 +7,8 @@ from scipy.io.wavfile import write
 from audio_streaming.linux_audio_stream import LinuxAudioStream
 from audio_processing.audio_processor import AudioProcessor
 
+OUTPUT_FOLDER = "output"
+
 
 def main(
     chunk_size=2048,
@@ -56,7 +58,11 @@ def main(
     shifted_audio = np.concatenate(shifted_audio, axis=0)
 
     # Save the shifted audio to a file
-    write(output_file, audio_stream.rate, shifted_audio.astype(np.int16))
+    write(
+        f"{OUTPUT_FOLDER}/{output_file}",
+        audio_stream.rate,
+        shifted_audio.astype(np.int16),
+    )
 
 
 if __name__ == "__main__":
