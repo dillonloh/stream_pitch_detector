@@ -1,3 +1,4 @@
+import os
 import platform
 import time
 
@@ -5,6 +6,7 @@ import numpy as np
 from scipy.io.wavfile import write
 
 from audio_streaming.linux_audio_stream import LinuxAudioStream
+from audio_streaming.windows_audio_stream import WindowsAudioStream
 from audio_processing.audio_processor import AudioProcessor
 
 OUTPUT_FOLDER = "output"
@@ -17,11 +19,20 @@ def main(
     duration=-1,
     output_file="shifted_audio",
 ):
+    # Check if the output folder exists, if not create it
+    if not os.path.exists(OUTPUT_FOLDER):
+        os.makedirs(OUTPUT_FOLDER)
+        
+    audio_stream = None
+    
     # check if os is linux
     try:
         current_platform = platform.system().lower()
+        print(f"Running on OS: {current_platform}")
         if "linux" in current_platform:
             audio_stream = LinuxAudioStream(chunk_size=chunk_size, rate=sample_rate)
+        elif "windows" in current_platform:
+            audio_stream = WindowsAudioStream(chunk_size=chunk_size, rate=sample_rate)
         else:
             raise NotImplementedError(
                 f"OS: {current_platform} is not currently supported"
@@ -50,10 +61,13 @@ def main(
 
     except Exception as e:
         print(f"Error: {e}")
+        exit(1)
 
     finally:
-        audio_stream.stop_stream()
-
+        if audio_stream is not None:
+            audio_stream.stop_stream()
+        
+    
     # Concatenate all shifted audio chunks
     shifted_audio = np.concatenate(shifted_audio, axis=0)
     output_file_name = f"{OUTPUT_FOLDER}/{output_file}_{semitones}.wav"
