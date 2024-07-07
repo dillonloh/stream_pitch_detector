@@ -1,6 +1,7 @@
 import os
 import platform
 import time
+import traceback
 
 import numpy as np
 from scipy.io.wavfile import write
@@ -51,7 +52,7 @@ def main(
 
         while (time.time() - start_time) < duration:
             chunk = audio_stream.stream_audio_chunk()
-            pitch = audio_processor.get_chunk_pitch(chunk)
+            pitch = audio_processor.get_chunk_note(chunk)
             print(f"Pitch: {pitch}")
             shifted_chunk = audio_processor.shift_pitch(chunk, semitones=semitones)
             shifted_audio.append(shifted_chunk)
@@ -60,7 +61,7 @@ def main(
         print("Keyboard Interrupt")
 
     except Exception as e:
-        print(f"Error: {e}")
+        print(traceback.format_exc())
         exit(1)
 
     finally:
