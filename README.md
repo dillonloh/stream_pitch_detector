@@ -32,6 +32,7 @@ pip install -r requirements.txt # install dependencies
 
 To try it out, simply run the main.py file in the source code root. You can modify the top constant variables to suit your needs.
 ```
+cd stream_pitch_detector # you should now be in stream_pitch_detector/stream_pitch_detector/
 python main.py
 ```
 
